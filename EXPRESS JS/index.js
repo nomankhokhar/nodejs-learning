@@ -73,7 +73,7 @@ const Joi = require('joi')
 
 app.use(express.json())
 
-const courses = [
+let courses = [
   { id: 1, name: 'courses1' },
   { id: 2, name: 'courses2' },
   { id: 3, name: 'courses3' },
@@ -122,17 +122,32 @@ app.put("/api/courses/:id", (req, res) => {
 
   if (id && name) {
     const course = courses.find(course => course.id == id)
-    if (course){
+    if (course) {
       course.name = name
       res.send(courses)
-    }else{
-      res.status(400).json({msg : "course not found"})
+    } else {
+      res.status(400).json({ msg: "course not found" })
     }
-  }else{
+  } else {
     res.status(404).json("id and name not found")
   }
 })
 
+app.delete("/api/courses/:id", (req, res) => {
+  const id = req.params.id
+
+  if (id) {
+    const courseID = courses.find(course => course.id == id);
+    if (courseID) {
+      courses = courses.filter(course => course.id != courseID.id)
+      res.send(courses)
+    } else {
+      res.status(400).json({ msg: "course not found" })
+    }
+  } else {
+    res.status(404).json("id not found")
+  }
+})
 
 const PORT = process.env.PORT || 3000
 
