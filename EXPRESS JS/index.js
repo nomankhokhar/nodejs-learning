@@ -1,16 +1,16 @@
-const express = require("express");
-const path = require("path");
-const BodyParser = require("body-parser");
-const res = require("express/lib/response");
-const { registerUser } = require("./UserController");
-const router = require("./UserRoute");
-const { Router } = require("express");
-const app = express();
-const port = 4000;
-app.use(BodyParser.urlencoded({ extended:false }));  // Encode Url data into JSON Formate
-app.use(express.json());  // TO Check Body Data in Json Formate
+// const express = require("express");
+// const path = require("path");
+// const BodyParser = require("body-parser");
+// const res = require("express/lib/response");
+// const { registerUser } = require("./UserController");
+// const router = require("./UserRoute");
+// const { Router } = require("express");
+// const app = express();
+// const port = 4000;
+// app.use(BodyParser.urlencoded({ extended:false }));  // Encode Url data into JSON Formate
+// app.use(express.json());  // TO Check Body Data in Json Formate
 
-app.use("/api/v1",router);   // Set Route for URL which Url will be generated
+// app.use("/api/v1",router);   // Set Route for URL which Url will be generated
 
 // console.log(__dirname);
 
@@ -41,22 +41,75 @@ app.use("/api/v1",router);   // Set Route for URL which Url will be generated
 // })
 
 
-app.listen(port,()=>{
-  console.log(`Server is running : ${port}`);
-})
+// app.listen(port,()=>{
+//   console.log(`Server is running : ${port}`);
+// })
 
 
 // REST (Representational State Transfer) is an API that define a set of function that programmer can use to send request and receive respones using the HTTP protocol methods such as GET and POST
 
 
-app.get("/", (req,res)=>{
-    res.sendFile(path.join(__dirname + "/index.html"));
-    //     res.json({
+// app.get("/", (req,res)=>{
+// res.sendFile(path.join(__dirname + "/index.html"));
+//     res.json({
 //         Name : "Noman Ali",
 //         Email:"sample@gmail.com",
 //         Password:"Noman_Ali"
 //  })
+// })
+
+
+
+
+
+
+
+
+
+// API with MOSH AMDANI
+const express = require('express')
+const app = express()
+
+
+app.use(express.json())
+
+const courses = [
+  { id: 1, name: 'courses1' },
+  { id: 2, name: 'courses2' },
+  { id: 3, name: 'courses3' },
+]
+
+app.get("/", (req, res) => {
+  res.send('Hello Noman')
 })
 
+app.get("/api/courses", (req, res) => {
+  res.send([1, 2, 3])
+})
 
+app.get('/api/courses/:id', (req, res) => {
+  const course = courses.find(course => course.id == parseInt(req.params.id))
+  if (!course) {
+    res.send(404)
+  }
+  else {
+    res.send(course)
+  }
+})
 
+app.post('/api/courses', (req, res) => {
+  const data = req.body
+  if (req.body.id && req.body.name) {
+
+    courses.push(data)
+    res.send(courses)
+  } else {
+    res.status(400).send("id and name is InCorrect")
+  }
+})
+
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () => {
+  console.log("Connected! at 3000")
+})
