@@ -72,120 +72,33 @@
 const config = require('config')
 const express = require('express')
 const app = express()
-const Joi = require('joi')
 const helmet = require('helmet')
 const { Auth, loggin } = require('./logger')
 const morgan = require('morgan')
 const startupDebugger = require('debug')('app:startup');
 const dbDebugger = require('debug')('app:db');
-
+const coursesRoutes = require('./routes/courses')
+const homeRoutes = require('./routes/home')
 
 app.set('view engine', 'pug')
 app.set('views', './views')
 app.use(express.urlencoded({ extended: true }), express.json(), loggin, Auth)
 app.use(helmet())
+app.use('/api/courses', coursesRoutes)
+app.use('/', homeRoutes)
 
+// this will folder serve the static files data whatever server you want whatever the folder name it is.
+// app.use(express.static('public'))
 
 // Configuration
-
 console.log('Application Name: ', config.get('name'))
 console.log('Mail Server: ', config.get('mail.host'))
+
 
 if (app.get('env') === 'development') {
   app.use(morgan('tiny'))
   startupDebugger('Morgan enabled...')
 }
-
-// this will folder serve the static files data whatever server you want
-// whatever the folder name it is.
-
-app.use(express.static('public'))
-
-let courses = [
-  { id: 1, name: 'courses1' },
-  { id: 2, name: 'courses2' },
-  { id: 3, name: 'courses3' },
-]
-
-app.get("/", (req, res) => {
-  res.render('index', { title: "My Express App", message: 'Hello' })
-})
-
-app.get("/api/courses", (req, res) => {
-  res.send([1, 2, 3])
-})
-
-app.get('/api/courses/:id', (req, res) => {
-  const course = courses.find(course => course.id == parseInt(req.params.id))
-  if (!course) {
-    res.send(404)
-    return
-  }
-  else {
-    res.send(course)
-    return
-  }
-})
-
-app.post('/api/courses', (req, res) => {
-  const schema = Joi.object({
-    id: Joi.number().required(),
-    name: Joi.string().min(4).required()
-  });
-
-  const { error, value } = schema.validate(req.body);
-
-  if (!error) {
-    courses.push(value);
-    res.send(courses);
-    return
-  } else {
-    res.status(400).send(error);
-    return
-  }
-
-})
-
-
-
-app.put("/api/courses/:id", (req, res) => {
-  const id = req.params.id
-  const name = req.body.name
-
-  if (id && name) {
-    const course = courses.find(course => course.id == id)
-    if (course) {
-      course.name = name
-      res.send(courses)
-      return
-    } else {
-      res.status(400).json({ msg: "course not found" })
-      return
-    }
-  } else {
-    res.status(404).json("id and name not found")
-    return
-  }
-})
-
-app.delete("/api/courses/:id", (req, res) => {
-  const id = req.params.id
-
-  if (id) {
-    const courseID = courses.find(course => course.id == id);
-    if (courseID) {
-      courses = courses.filter(course => course.id != courseID.id)
-      res.send(courses)
-      return
-    } else {
-      res.status(400).json({ msg: "course not found" })
-      return
-    }
-  } else {
-    res.status(404).json("id not found")
-    return
-  }
-})
 
 const PORT = process.env.PORT || 3000
 
