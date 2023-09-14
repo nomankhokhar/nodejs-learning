@@ -69,7 +69,7 @@
 // API with MOSH AMDANI
 const express = require('express')
 const app = express()
-
+const Joi = require('joi')
 
 app.use(express.json())
 
@@ -98,15 +98,41 @@ app.get('/api/courses/:id', (req, res) => {
 })
 
 app.post('/api/courses', (req, res) => {
-  const data = req.body
-  if (req.body.id && req.body.name) {
+  const schema = Joi.object({
+    id: Joi.number().required(),
+    name: Joi.string().min(4).required()
+  });
 
-    courses.push(data)
-    res.send(courses)
+  const { error, value } = schema.validate(req.body);
+
+  if (!error) {
+    courses.push(value);
+    res.send(courses);
   } else {
-    res.status(400).send("id and name is InCorrect")
+    res.status(400).send(error);
+  }
+
+})
+
+
+
+app.put("/api/courses/:id", (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+
+  if (id && name) {
+    const course = courses.find(course => course.id == id)
+    if (course){
+      course.name = name
+      res.send(courses)
+    }else{
+      res.status(400).json({msg : "course not found"})
+    }
+  }else{
+    res.status(404).json("id and name not found")
   }
 })
+
 
 const PORT = process.env.PORT || 3000
 
