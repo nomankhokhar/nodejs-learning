@@ -7,6 +7,6 @@ const registerUser = require("./UserController");
 router.route("/register").post(registerUser);
 router.route("/login").get(registerUser);
 // .get((req,res)=>{
-    // res.send("I Love UCP forever!");
+    // res.send("I Love forever!");
 // })
 module.exports = router;

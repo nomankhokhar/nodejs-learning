@@ -378,7 +378,8 @@
 // const express = require('express');
 // const EventEmitter = require('events');
 
-// const events =new EventEmitter();
+const events = new EventEmitter();
+
 
 // let count=0;
 // events.on("countAPI", ()=>{
@@ -418,9 +419,10 @@ const express = require('express');
 const app = express();
 
 const con = require('./confihsql');
+const { count } = require('console');
 
-app.get("/",(req,resp)=>{
-    con.query("select * from lol",(err,res)=>{
+app.get("/", (req, resp) => {
+    con.query("select * from lol", (err, res) => {
         console.log(res);
     })
 });
