@@ -91,9 +91,11 @@ app.get('/api/courses/:id', (req, res) => {
   const course = courses.find(course => course.id == parseInt(req.params.id))
   if (!course) {
     res.send(404)
+    return
   }
   else {
     res.send(course)
+    return
   }
 })
 
@@ -108,8 +110,10 @@ app.post('/api/courses', (req, res) => {
   if (!error) {
     courses.push(value);
     res.send(courses);
+    return
   } else {
     res.status(400).send(error);
+    return
   }
 
 })
@@ -125,11 +129,14 @@ app.put("/api/courses/:id", (req, res) => {
     if (course) {
       course.name = name
       res.send(courses)
+      return
     } else {
       res.status(400).json({ msg: "course not found" })
+      return
     }
   } else {
     res.status(404).json("id and name not found")
+    return
   }
 })
 
@@ -141,11 +148,14 @@ app.delete("/api/courses/:id", (req, res) => {
     if (courseID) {
       courses = courses.filter(course => course.id != courseID.id)
       res.send(courses)
+      return
     } else {
       res.status(400).json({ msg: "course not found" })
+      return
     }
   } else {
     res.status(404).json("id not found")
+    return
   }
 })
 
