@@ -67,11 +67,39 @@
 
 
 // API with MOSH AMDANI
+
+
+const config = require('config')
 const express = require('express')
 const app = express()
 const Joi = require('joi')
+const helmet = require('helmet')
+const { Auth, loggin } = require('./logger')
+const morgan = require('morgan')
+const startupDebugger = require('debug')('app:startup');
+const dbDebugger = require('debug')('app:db');
 
-app.use(express.json())
+
+app.set('view engine', 'pug')
+app.set('views', './views')
+app.use(express.urlencoded({ extended: true }), express.json(), loggin, Auth)
+app.use(helmet())
+
+
+// Configuration
+
+console.log('Application Name: ', config.get('name'))
+console.log('Mail Server: ', config.get('mail.host'))
+
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'))
+  startupDebugger('Morgan enabled...')
+}
+
+// this will folder serve the static files data whatever server you want
+// whatever the folder name it is.
+
+app.use(express.static('public'))
 
 let courses = [
   { id: 1, name: 'courses1' },
@@ -80,7 +108,7 @@ let courses = [
 ]
 
 app.get("/", (req, res) => {
-  res.send('Hello Noman')
+  res.render('index', { title: "My Express App", message: 'Hello' })
 })
 
 app.get("/api/courses", (req, res) => {
