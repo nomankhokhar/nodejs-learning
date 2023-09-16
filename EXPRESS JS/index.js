@@ -82,6 +82,7 @@ const homeRoutes = require('./routes/home')
 
 app.set('view engine', 'pug')
 app.set('views', './views')
+// Use more -> Than One Parameter for Application Level Middleware
 app.use(express.urlencoded({ extended: true }), express.json(), loggin, Auth)
 app.use(helmet())
 
