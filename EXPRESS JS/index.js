@@ -84,6 +84,8 @@ app.set('view engine', 'pug')
 app.set('views', './views')
 app.use(express.urlencoded({ extended: true }), express.json(), loggin, Auth)
 app.use(helmet())
+
+
 app.use('/api/courses', coursesRoutes)
 app.use('/', homeRoutes)
 
