@@ -27,3 +27,26 @@
 
 
 // Process, threads, Threads Pool in NodeJS -> See Pictures
+
+
+
+//////////////////////////////////////
+////////////// Module Systems
+
+// Each JavaScript file in Node.js is considered a module.
+// Nodejs uses  the commonJS module system: require(), exports, module.exports
+// ES module system is used in browsers: import, export
+
+
+
+// require('text-module.txt') where this came from
+
+(function require(exports, module, __filename, __dirname, require) {
+    // Module code
+})
+
+// require : function to require modules
+// module : reference to the current module;
+// exports : reference to module.exports, used to export object from a module;
+// __filename : absolute path to the current module file;
+// __dirname : absolute path to the current directory of the module file;
