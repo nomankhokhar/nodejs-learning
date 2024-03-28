@@ -17,4 +17,15 @@
 // Companies like NETFLIX, UBER, PAYPAL, etc. use NodeJS
 // Another reason to use NodeJS is that it's built on JS, so you can use the same language on the client and server side
 // NodeJS is open source and has a large community
-// Huge libray of modules available through NPM (Node Package Manager)
+// Huge library of modules available through NPM (Node Package Manager)
+
+
+
+
+
+// For installing the dev and project dependency
+
+// npm i {packageName}
+// npm i {packageName} --save-dev
+// npm outdated
+// npm update {packageName}
