@@ -17,6 +17,31 @@ app.get('/api/v1/tours', (req,res)=>{
     })
 })
 
+// /:id/:x/:y?/:z? we can get x, y, z as optional parameters
+// http://localhost:4000/api/v1/tours/1/2/3/4
+// values store it in req.params and it will be an object
+//  { id: '1', x: '2', y: '3', z: '4' }
+
+app.get('/api/v1/tours/:id', (req, res) => {
+    const id = req.params.id;
+    
+    const tour = tours.find(el => el.id == id)
+    
+    if(!tour){
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        })
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour
+        }
+    })
+})
+
 app.post('/api/v1/tours', (req, res) => {
     // get the last id of the data then add 1 to it for next data id
     
@@ -43,30 +68,52 @@ app.post('/api/v1/tours', (req, res) => {
     })
 })
 
-
-// /:id/:x/:y?/:z? we can get x, y, z as optional parameters
-// http://localhost:4000/api/v1/tours/1/2/3/4
-// values store it in req.params and it will be an object
-//  { id: '1', x: '2', y: '3', z: '4' }
-
-app.get('/api/v1/tours/:id', (req, res) => {
-    const id = req.params.id;
+app.patch('/api/v1/tours/:id', (req, res) => {
     
-    const tour = tours.find(el => el.id == id)
-    
-    if(!tour){
+    // * 1 is a trick to convert string to number
+    const id = req.params.id * 1;
+
+    if(id > tours.length){
         return res.status(404).json({
             status: 'fail',
             message: 'Invalid ID'
         })
     }
 
+    const tour = tours.find(el => el.id === id)
+
+
+
     res.status(200).json({
         status: 'success',
-        data: {
-            tour
+        data : {
+            tour: '<Updated tour here...>',
         }
     })
+
+})
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+    
+    // * 1 is a trick to convert string to number
+    const id = req.params.id * 1;
+
+    if(id > tours.length){
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        })
+    }
+
+    const tour = tours.find(el => el.id === id)
+
+    
+
+    res.status(204).json({
+        status: 'success',
+        data : null
+    })
+
 })
 
 
