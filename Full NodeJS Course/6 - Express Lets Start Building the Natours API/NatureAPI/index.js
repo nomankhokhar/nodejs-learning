@@ -6,7 +6,7 @@ app.use(express.json())
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
 
-app.get('/api/v1/tours', (req,res)=>{
+const getAllTours = (req,res)=>{
 
     res.status(200).json({
         status: 'success',
@@ -15,14 +15,9 @@ app.get('/api/v1/tours', (req,res)=>{
             tours
         }
     })
-})
+}
 
-// /:id/:x/:y?/:z? we can get x, y, z as optional parameters
-// http://localhost:4000/api/v1/tours/1/2/3/4
-// values store it in req.params and it will be an object
-//  { id: '1', x: '2', y: '3', z: '4' }
-
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
     const id = req.params.id;
     
     const tour = tours.find(el => el.id == id)
@@ -40,9 +35,9 @@ app.get('/api/v1/tours/:id', (req, res) => {
             tour
         }
     })
-})
+}
 
-app.post('/api/v1/tours', (req, res) => {
+const updateTour = (req, res) => {
     // get the last id of the data then add 1 to it for next data id
     
     const newId = tours[tours.length - 1].id + 1;    
@@ -66,9 +61,9 @@ app.post('/api/v1/tours', (req, res) => {
             }
         })
     })
-})
+}
 
-app.patch('/api/v1/tours/:id', (req, res) => {
+const patchTour = (req, res) => {
     
     // * 1 is a trick to convert string to number
     const id = req.params.id * 1;
@@ -91,9 +86,9 @@ app.patch('/api/v1/tours/:id', (req, res) => {
         }
     })
 
-})
+}
 
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteaTour = (req, res) => {
     
     // * 1 is a trick to convert string to number
     const id = req.params.id * 1;
@@ -114,7 +109,22 @@ app.delete('/api/v1/tours/:id', (req, res) => {
         data : null
     })
 
-})
+}
+
+app.get('/api/v1/tours', getAllTours)
+
+// /:id/:x/:y?/:z? we can get x, y, z as optional parameters
+// http://localhost:4000/api/v1/tours/1/2/3/4
+// values store it in req.params and it will be an object
+//  { id: '1', x: '2', y: '3', z: '4' }
+
+app.get('/api/v1/tours/:id', getTour)
+
+app.post('/api/v1/tours', updateTour)
+
+app.patch('/api/v1/tours/:id', patchTour)
+
+app.delete('/api/v1/tours/:id', deleteaTour)
 
 
 
