@@ -182,21 +182,35 @@ const deleteUser = (req, res) => {
 
 // Another best way to create routes
 
-app.route('/api/v1/tours')
+const tourRouter = express.Router();
+const userRouter = express.Router();
+
+tourRouter.route('/')
     .get(getAllTours)
     .post(updateTour);
 
 
-app.route('/api/v1/tours/:id')
+tourRouter.route('/:id')
     .get(getTour)
     .patch(patchTour)
     .delete(deleteTour);
 
+userRouter.route('/')
+    .get(getAllUser)
+    .post(createUser)
 
-app.route('/api/v1/users').get(getAllUser).post(createUser)
-app.route('/api/v1/users/:id').get(getUser).patch(updateUser).delete(deleteUser)
+userRouter.route('/:id')
+    .get(getUser)
+    .patch(updateUser)
+    .delete(deleteUser)
+
+
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
+    
 
 const PORT = 4000;
+    
 app.listen(PORT,()=>{
     console.log(`App is running on port ${PORT}`)
 })
