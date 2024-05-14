@@ -1,12 +1,29 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const morgan = require('morgan');
 
+// Apply middleware to all routes
+
+app.use(morgan('dev'))
 app.use(express.json())
+
+app.use((req, res, next) => {
+    console.log('Hello from the middleware')
+    next()
+})
+
+app.use((req, res, next) => {
+    req.requestTime = new Date().toISOString();
+    req.noman = 'Noman Ali'
+    next()
+})
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
 
 const getAllTours = (req,res)=>{
+    console.log(req.requestTime)
+    console.log(req.noman)
 
     res.status(200).json({
         status: 'success',
@@ -111,6 +128,42 @@ const deleteTour = (req, res) => {
 
 }
 
+const getAllUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    })
+}
+
+const getUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    })
+
+}
+
+const createUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    })
+}
+
+const updateUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    })
+}
+
+const deleteUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    })
+}
+
 
 // One way to create routes
 
@@ -138,6 +191,10 @@ app.route('/api/v1/tours/:id')
     .get(getTour)
     .patch(patchTour)
     .delete(deleteTour);
+
+
+app.route('/api/v1/users').get(getAllUser).post(createUser)
+app.route('/api/v1/users/:id').get(getUser).patch(updateUser).delete(deleteUser)
 
 const PORT = 4000;
 app.listen(PORT,()=>{
