@@ -88,7 +88,7 @@ const patchTour = (req, res) => {
 
 }
 
-const deleteaTour = (req, res) => {
+const deleteTour = (req, res) => {
     
     // * 1 is a trick to convert string to number
     const id = req.params.id * 1;
@@ -111,22 +111,33 @@ const deleteaTour = (req, res) => {
 
 }
 
-app.get('/api/v1/tours', getAllTours)
+
+// One way to create routes
+
+// app.get('/api/v1/tours', getAllTours)
+// app.post('/api/v1/tours', updateTour)
 
 // /:id/:x/:y?/:z? we can get x, y, z as optional parameters
 // http://localhost:4000/api/v1/tours/1/2/3/4
 // values store it in req.params and it will be an object
 //  { id: '1', x: '2', y: '3', z: '4' }
 
-app.get('/api/v1/tours/:id', getTour)
-
-app.post('/api/v1/tours', updateTour)
-
-app.patch('/api/v1/tours/:id', patchTour)
-
-app.delete('/api/v1/tours/:id', deleteaTour)
+// app.get('/api/v1/tours/:id', getTour)
+// app.patch('/api/v1/tours/:id', patchTour)
+// app.delete('/api/v1/tours/:id', deleteTour)
 
 
+// Another best way to create routes
+
+app.route('/api/v1/tours')
+    .get(getAllTours)
+    .post(updateTour);
+
+
+app.route('/api/v1/tours/:id')
+    .get(getTour)
+    .patch(patchTour)
+    .delete(deleteTour);
 
 const PORT = 4000;
 app.listen(PORT,()=>{
