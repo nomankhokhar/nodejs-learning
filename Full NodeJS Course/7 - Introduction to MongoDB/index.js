@@ -32,3 +32,9 @@
 
 
 // db.tours.find({$or : [{price : {$lt:500} , rating: {$gte : 1}}]}, {name : 1}) -> return only name of the document if any of the condition is true
+// db.tours.updateOne({name : "Noman Ali"}, {$set : {price : 587}}) -> to update the document where name is Noman Ali and set the price to 587
+// db.tours.updateMany({$or : [{price : {$gt : 500} , rating : {$gte : 4.8}}]}, {$set : { premium : true }}) -> to update the document where price is greater than 500 and rating is greater than or equal to 4.8 and set the new field premium to true
+
+
+// db.tours.deleteOne({name : "The Snow Adventurer"}) -> to delete the document where name is The Snow Adventurer
+// db.tours.deleteMany({price : {$gte : 500}}) -> to delete the document where price is greater than or equal to 500
